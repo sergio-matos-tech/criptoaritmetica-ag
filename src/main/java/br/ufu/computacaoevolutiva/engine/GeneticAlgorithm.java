@@ -47,7 +47,7 @@ public class GeneticAlgorithm {
     public EvolutionResult evolve() {
         long startTime = System.nanoTime();
 
-        // 1. Inicialização
+        // 1. Inicialização limpa
         Population currentPopulation = new Population();
         for (int i = 0; i < populationSize; i++) {
             currentPopulation.addIndividual(new Individual(random));
@@ -63,27 +63,22 @@ public class GeneticAlgorithm {
         while (currentGeneration < maxGenerations && globalBest.getFitness() != 0) {
             Population offspring = new Population();
 
-            // Gera filhos até atingir o tamanho da população
             while (offspring.size() < populationSize) {
-                // Seleção
                 Individual parent1 = selection.select(currentPopulation, random);
                 Individual parent2 = selection.select(currentPopulation, random);
 
                 Individual child1;
                 Individual child2;
 
-                // Crossover
                 if (random.nextDouble() < crossoverRate) {
                     Individual[] children = crossover.crossover(parent1, parent2, random);
                     child1 = children[0];
                     child2 = children[1];
                 } else {
-                    // Sem crossover: cópia exata dos pais (clone defensivo)
                     child1 = new Individual(parent1.getGenes());
                     child2 = new Individual(parent2.getGenes());
                 }
 
-                // Mutação
                 if (random.nextDouble() < mutationRate) mutation.mutate(child1, random);
                 if (random.nextDouble() < mutationRate) mutation.mutate(child2, random);
 
@@ -93,13 +88,10 @@ public class GeneticAlgorithm {
                 }
             }
 
-            // Avalia os novos filhos
             evaluatePopulation(offspring);
 
-            // Reinserção: Define quem sobrevive para a próxima geração
             currentPopulation = replacement.replace(currentPopulation, offspring, populationSize);
             
-            // Atualiza o melhor indivíduo
             Individual generationBest = currentPopulation.getBest();
             if (generationBest.getFitness() < globalBest.getFitness()) {
                 globalBest = generationBest;

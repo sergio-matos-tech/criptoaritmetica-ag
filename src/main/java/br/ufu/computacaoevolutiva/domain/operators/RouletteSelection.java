@@ -11,31 +11,30 @@ public class RouletteSelection implements SelectionStrategy {
     @Override
     public Individual select(Population population, Random random) {
         List<Individual> individuals = population.getIndividuals();
-        if (individuals.isEmpty()) 
+        if (individuals.isEmpty()) {
             throw new IllegalStateException("A população não pode estar vazia.");
-
-        double totalInvertedFitness = 0.0;
-        double[] invertedFitnesses = new double[individuals.size()];
-
-        // 1. Calcula a aptidão invertida para lidar com problema de minimização
-        for (int i = 0; i < individuals.size(); i++) {
-            // Soma 1 no denominador para evitar divisão por zero caso o fitness seja 0 (solução perfeita)
-            invertedFitnesses[i] = 1.0 / (1.0 + individuals.get(i).getFitness());
-            totalInvertedFitness += invertedFitnesses[i];
         }
 
-        // 2. Gira a roleta (sorteia um valor entre 0 e a soma total)
-        double spin = random.nextDouble() * totalInvertedFitness;
+        double totalFitness = 0.0;
+        double[] selectionWeights = new double[individuals.size()];
+
+        // Roleta proporcional para minimização:
+        // converte fitness em aptidão invertida, favorecendo quem tem menor erro.
+        for (int i = 0; i < individuals.size(); i++) {
+            selectionWeights[i] = 1.0 / (1.0 + individuals.get(i).getFitness());
+            totalFitness += selectionWeights[i];
+        }
+
+        double spin = random.nextDouble() * totalFitness;
         double accumulated = 0.0;
 
-        // 3. Verifica em qual fatia a "bolinha" da roleta caiu
         for (int i = 0; i < individuals.size(); i++) {
-            accumulated += invertedFitnesses[i];
-            if (accumulated >= spin) 
+            accumulated += selectionWeights[i];
+            if (accumulated >= spin) {
                 return individuals.get(i);
+            }
         }
 
-        // Fallback de segurança por erro de precisão de ponto flutuante
         return individuals.get(individuals.size() - 1);
     }
 }
