@@ -72,22 +72,27 @@ public class ExperimentRunnerEtapa3 {
         System.out.println("=====================================================================================");
 
         Variacao[] variacoes = {
-                new Variacao("V0", "Baseline Etapa 3", 100, 50, 0.40, 0.80, 0.20,
+                new Variacao("V0", "Baseline Etapa 3 (V15)", 100, 75, 0.50, 0.80, 0.20,
                         new GlobalDifferenceFitness(), new RouletteSelectionAggressive(),
                         new PmxCrossover(), new SwapMutation()),
-                new Variacao("V1", "PositionalErrorFitness", 100, 50, 0.40, 0.80, 0.20,
+                
+                new Variacao("V1", "PositionalErrorFitness", 100, 75, 0.50, 0.80, 0.20,
                         new PositionalErrorFitness(), new RouletteSelectionAggressive(),
                         new PmxCrossover(), new SwapMutation()),
-                new Variacao("V2", "PositionalError + Mutacao 50%", 100, 50, 0.50, 0.80, 0.20,
+                
+                new Variacao("V2", "PositionalError + Mut 60%", 100, 75, 0.60, 0.80, 0.20,
                         new PositionalErrorFitness(), new RouletteSelectionAggressive(),
                         new PmxCrossover(), new SwapMutation()),
-                new Variacao("V3", "PositionalError + Tournament", 100, 50, 0.40, 0.80, 0.20,
+                
+                new Variacao("V3", "PositionalError + Tournament", 100, 75, 0.50, 0.80, 0.20,
                         new PositionalErrorFitness(), new TournamentSelection(3),
                         new PmxCrossover(), new SwapMutation()),
-                new Variacao("V4", "PositionalError + CyclicCross", 100, 50, 0.40, 0.80, 0.20,
+                
+                new Variacao("V4", "PositionalError + CyclicCross", 100, 75, 0.50, 0.80, 0.20,
                         new PositionalErrorFitness(), new RouletteSelectionAggressive(),
                         new CyclicCrossover(), new SwapMutation()),
-                new Variacao("V5", "Pop 150 + Tournament", 150, 50, 0.40, 0.80, 0.20,
+                
+                new Variacao("V5", "Pop 150 + Tournament", 150, 75, 0.50, 0.80, 0.20,
                         new PositionalErrorFitness(), new TournamentSelection(3),
                         new PmxCrossover(), new SwapMutation())
         };
