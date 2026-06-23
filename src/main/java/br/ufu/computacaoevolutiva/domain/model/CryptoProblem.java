@@ -12,11 +12,23 @@ import java.util.Set;
  * Pré-calcula os pesos base-10 e os índices das letras iniciais para otimização O(1).
  */
 public class CryptoProblem {
+    private final List<String> addends;
+    private final String result;
     private final char[] uniqueLetters;
     private final int[] weights;
     private final int[] leadingLetterIndices; 
 
     public CryptoProblem(List<String> addends, String result) {
+        if (addends == null || addends.isEmpty()) {
+            throw new IllegalArgumentException("O problema deve conter pelo menos uma parcela.");
+        }
+        if (result == null || result.isEmpty()) {
+            throw new IllegalArgumentException("O resultado nao pode ser nulo ou vazio.");
+        }
+
+        this.addends = List.copyOf(addends);
+        this.result = result;
+
         Map<Character, Integer> weightMap = new HashMap<>();
         Set<Character> leadingChars = new HashSet<>(); 
 
@@ -62,6 +74,8 @@ public class CryptoProblem {
         }
     }
 
+    public List<String> getAddends() { return addends; }
+    public String getResult() { return result; }
     public char[] getUniqueLetters() { return uniqueLetters; }
     public int[] getWeights() { return weights; }
 
