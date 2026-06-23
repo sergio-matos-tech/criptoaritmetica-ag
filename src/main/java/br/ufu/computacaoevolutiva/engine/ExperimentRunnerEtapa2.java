@@ -84,6 +84,10 @@ public class ExperimentRunnerEtapa2 {
             new Variacao("V9",  "Pop150 + Gen75",         150,  75, 0.20, 0.80, 0.20),
             new Variacao("V10", "Pop150 + Mut30%",        150,  50, 0.30, 0.80, 0.20),
             new Variacao("V11", "Gen75 + Mut30%",         100,  75, 0.30, 0.80, 0.20),
+            new Variacao("V12", "Mutacao 50%",            100,  50, 0.50, 0.80, 0.20),
+            new Variacao("V13", "Mut40% + Elit10%",       100,  50, 0.40, 0.80, 0.10),
+            new Variacao("V14", "Mut40% + Gen75",         100,  75, 0.40, 0.80, 0.20),
+            new Variacao("V15", "Mut50% + Gen75",         100,  75, 0.50, 0.80, 0.20),
         };
 
         double baselineTimeMs = -1;
