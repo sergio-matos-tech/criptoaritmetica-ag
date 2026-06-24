@@ -15,7 +15,6 @@ import br.ufu.computacaoevolutiva.domain.operators.OrderedReplacement;
 import br.ufu.computacaoevolutiva.domain.operators.PmxCrossover;
 import br.ufu.computacaoevolutiva.domain.operators.ReplacementStrategy;
 import br.ufu.computacaoevolutiva.domain.operators.RouletteSelectionAggressive;
-import br.ufu.computacaoevolutiva.domain.operators.RouletteSelection;
 import br.ufu.computacaoevolutiva.domain.operators.SelectionStrategy;
 import br.ufu.computacaoevolutiva.domain.operators.SwapMutation;
 import br.ufu.computacaoevolutiva.domain.operators.TournamentSelection;
@@ -79,9 +78,9 @@ public class ExperimentRunner {
 
                                 EvolutionResult result = ga.evolve();
 
-                                if (result.isConverged()) {
+                                if (result.isConverged()) 
                                     convergences++;
-                                }
+                                
                                 totalTimeNs += result.getExecutionTimeNs();
                             }
 

@@ -100,14 +100,12 @@ public class ExperimentRunnerEtapa3 {
         double baselineTimeMs = -1.0;
 
         try (PrintWriter writer = new PrintWriter(new FileWriter("resultados_etapa3.csv"))) {
-            // Alinhado com o padrao da Etapa 2 para manter compatibilidade total no Power BI
             writer.println("ID,Descricao,PopSize,Geracoes,TaxaMutacao,TaxaCrossover,Elitismo,"
                     + "Convergencias,TempoMedio_ms,TaxaConvergencia,AcrescimoTempo_pct");
 
             for (int variationIndex = 0; variationIndex < variacoes.length; variationIndex++) {
                 Variacao v = variacoes[variationIndex];
                 
-                // Log parcial (imprime a variação e deixa o cursor na linha enquanto o algoritmo roda)
                 System.out.printf("Variacao %-4s | %-33s | pop=%3d gen=%3d mut=%.2f elit=%.2f -> ",
                         v.id, v.descricao, v.popSize, v.maxGen, v.mutationRate, v.elitismRate);
 
@@ -141,15 +139,13 @@ public class ExperimentRunnerEtapa3 {
                     }
                 }
 
-                // Calculo de metricas consolidadas: 5 problemas * 1000 execucoes = 5000 runs
                 int totalExecutions = NUM_PROBLEMS * NUM_EXECUTIONS;
                 double avgTimeMs = (totalTimeNs / (double) totalExecutions) / 1_000_000.0;
                 double convergenceRate = (convergences / (double) totalExecutions) * 100.0;
 
-                if ("V0".equals(v.id)) {
+                if ("V0".equals(v.id)) 
                     baselineTimeMs = avgTimeMs;
-                }
-
+                
                 double acrescimoPct = baselineTimeMs > 0.0
                         ? ((avgTimeMs - baselineTimeMs) / baselineTimeMs) * 100.0
                         : 0.0;

@@ -36,11 +36,8 @@ public class ExperimentRunnerEtapa2 {
 
     // Parametros fixos herdados da Config 16
     private static final FitnessEvaluator EVALUATOR = new GlobalDifferenceFitness();
-
-    // Limites do problema
     private static final int NUM_EXECUTIONS = 1000;
 
-    /** Descreve uma variacao de parametros a ser testada. */
     private static class Variacao {
         final String id;
         final String descricao;
@@ -93,7 +90,6 @@ public class ExperimentRunnerEtapa2 {
         double baselineTimeMs = -1;
 
         try (PrintWriter writer = new PrintWriter(new FileWriter("resultados_etapa2.csv"))) {
-            // Cabecalho: superset do CSV da etapa 1 + colunas de parametros variados
             writer.println("ID,Descricao,PopSize,Geracoes,TaxaMutacao,TaxaCrossover,Elitismo,"
                     + "Convergencias,TempoMedio_ms,TaxaConvergencia,AcrescimoTempo_pct");
 
@@ -117,9 +113,9 @@ public class ExperimentRunnerEtapa2 {
                             runRng
                     );
                     EvolutionResult result = ga.evolve();
-                    if (result.isConverged()) {
+                    if (result.isConverged()) 
                         convergences++;
-                    }
+                    
                     totalTimeNs += result.getExecutionTimeNs();
                 }
 
