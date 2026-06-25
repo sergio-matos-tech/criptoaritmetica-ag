@@ -33,8 +33,12 @@ public class ExperimentRunnerEtapa3 {
             new CryptoProblem(Arrays.asList("CROSS", "ROADS"), "DANGER"),
             new CryptoProblem(Arrays.asList("COCA", "COLA"), "OASIS"),
             new CryptoProblem(Arrays.asList("DONALD", "GERALD"), "ROBERT")
-            
     );
+
+    private static final String[] PROBLEM_NAMES = {
+            "SEND+MORE=MONEY", "EAT+THAT=APPLE", "CROSS+ROADS=DANGER",
+            "COCA+COLA=OASIS", "DONALD+GERALD=ROBERT"
+    };
 
     private static final class Variacao {
         final String id;
@@ -72,111 +76,121 @@ public class ExperimentRunnerEtapa3 {
         System.out.println("=====================================================================================");
 
         Variacao[] variacoes = {
+
                 new Variacao("V0", "Baseline Etapa 3 (V15)", 100, 75, 0.50, 0.80, 0.20,
                         new GlobalDifferenceFitness(), new RouletteSelectionAggressive(),
                         new PmxCrossover(), new SwapMutation()),
-                
+
                 new Variacao("V1", "PositionalErrorFitness", 100, 75, 0.50, 0.80, 0.20,
                         new PositionalErrorFitness(), new RouletteSelectionAggressive(),
                         new PmxCrossover(), new SwapMutation()),
-                
+
                 new Variacao("V2", "PositionalError + Mut 60%", 100, 75, 0.60, 0.80, 0.20,
                         new PositionalErrorFitness(), new RouletteSelectionAggressive(),
                         new PmxCrossover(), new SwapMutation()),
-                
+
                 new Variacao("V3", "PositionalError + Tournament", 100, 75, 0.50, 0.80, 0.20,
                         new PositionalErrorFitness(), new TournamentSelection(3),
                         new PmxCrossover(), new SwapMutation()),
-                
+
                 new Variacao("V4", "PositionalError + CyclicCross", 100, 75, 0.50, 0.80, 0.20,
                         new PositionalErrorFitness(), new RouletteSelectionAggressive(),
                         new CyclicCrossover(), new SwapMutation()),
-                
-                new Variacao("V5", "Pop 150 + Tournament", 150, 75, 0.50, 0.80, 0.20,
+
+                /* new Variacao("V5", "Pop 150 + Tournament", 150, 75, 0.50, 0.80, 0.20,
                         new PositionalErrorFitness(), new TournamentSelection(3),
+                        new PmxCrossover(), new SwapMutation())  */
+                
+               new Variacao("V5", "Global + Geracoes 110", 100, 110, 0.50, 0.80, 0.20,
+                        new GlobalDifferenceFitness(), new RouletteSelectionAggressive(),
+                        new PmxCrossover(), new SwapMutation()),
+ 
+                new Variacao("V6", "Global + Pop 150", 150, 75, 0.50, 0.80, 0.20,
+                        new GlobalDifferenceFitness(), new RouletteSelectionAggressive(),
+                        new PmxCrossover(), new SwapMutation()),
+ 
+                new Variacao("V7", "Global + Pop 200 + Ger 100", 200, 100, 0.50, 0.80, 0.20,
+                        new GlobalDifferenceFitness(), new RouletteSelectionAggressive(),
                         new PmxCrossover(), new SwapMutation())
         };
 
         double baselineTimeMs = -1.0;
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter("resultados_etapa3.csv"))) {
-            writer.println("ID,Descricao,PopSize,Geracoes,TaxaMutacao,TaxaCrossover,Elitismo,"
+        try (PrintWriter writerProblema = new PrintWriter(new FileWriter("resultados_etapa3_por_problema.csv"));
+             PrintWriter writerMedia = new PrintWriter(new FileWriter("resultados_etapa3.csv"))) {
+
+            writerProblema.println("ID,Descricao,Problema,Convergencias,TempoMedio_ms,TaxaConvergencia");
+            writerMedia.println("ID,Descricao,PopSize,Geracoes,TaxaMutacao,TaxaCrossover,Elitismo,"
                     + "Convergencias,TempoMedio_ms,TaxaConvergencia,AcrescimoTempo_pct");
 
             for (int variationIndex = 0; variationIndex < variacoes.length; variationIndex++) {
                 Variacao v = variacoes[variationIndex];
-                
-                System.out.printf("Variacao %-4s | %-33s | pop=%3d gen=%3d mut=%.2f elit=%.2f -> ",
-                        v.id, v.descricao, v.popSize, v.maxGen, v.mutationRate, v.elitismRate);
+                System.out.printf("Variacao %-4s | %-30s |%n", v.id, v.descricao);
 
-                long totalTimeNs = 0L;
-                int convergences = 0;
+                long totalTimeNsGeral = 0L;
+                int convergencesGeral = 0;
 
                 for (int problemIndex = 0; problemIndex < NUM_PROBLEMS; problemIndex++) {
                     CryptoProblem problem = PROBLEMS.get(problemIndex);
+                    long totalTimeNsProblema = 0L;
+                    int convergencesProblema = 0;
 
                     for (int executionIndex = 0; executionIndex < NUM_EXECUTIONS; executionIndex++) {
                         Random runRng = new Random(seedFor(variationIndex, problemIndex, executionIndex));
                         GeneticAlgorithm ga = new GeneticAlgorithm(
-                                problem,
-                                v.popSize,
-                                v.maxGen,
-                                v.crossoverRate,
-                                v.mutationRate,
-                                v.evaluator,
-                                v.selection,
-                                v.crossover,
-                                v.mutation,
-                                new ElitismReplacement(v.elitismRate),
-                                runRng
-                        );
+                                problem, v.popSize, v.maxGen, v.crossoverRate, v.mutationRate,
+                                v.evaluator, v.selection, v.crossover, v.mutation,
+                                new ElitismReplacement(v.elitismRate), runRng);
 
                         EvolutionResult result = ga.evolve();
-                        totalTimeNs += result.getExecutionTimeNs();
-                        if (result.isConverged()) {
-                            convergences++;
-                        }
+                        totalTimeNsProblema += result.getExecutionTimeNs();
+                        if (result.isConverged()) convergencesProblema++;
                     }
+
+                    double avgTimeMsProblema = (totalTimeNsProblema / (double) NUM_EXECUTIONS) / 1_000_000.0;
+                    double convRateProblema = (convergencesProblema / (double) NUM_EXECUTIONS) * 100.0;
+
+                    System.out.printf("   %-22s -> Conv: %5.1f%% | Tempo: %5.2f ms%n",
+                            PROBLEM_NAMES[problemIndex], convRateProblema, avgTimeMsProblema);
+
+                    writerProblema.printf(Locale.US, "%s,%s,%s,%d,%.4f,%.1f%n",
+                            v.id, v.descricao, PROBLEM_NAMES[problemIndex],
+                            convergencesProblema, avgTimeMsProblema, convRateProblema);
+
+                    totalTimeNsGeral += totalTimeNsProblema;
+                    convergencesGeral += convergencesProblema;
                 }
 
                 int totalExecutions = NUM_PROBLEMS * NUM_EXECUTIONS;
-                double avgTimeMs = (totalTimeNs / (double) totalExecutions) / 1_000_000.0;
-                double convergenceRate = (convergences / (double) totalExecutions) * 100.0;
+                double avgTimeMs = (totalTimeNsGeral / (double) totalExecutions) / 1_000_000.0;
+                double convergenceRate = (convergencesGeral / (double) totalExecutions) * 100.0;
 
-                if ("V0".equals(v.id)) 
-                    baselineTimeMs = avgTimeMs;
-                
+                if ("V0".equals(v.id)) baselineTimeMs = avgTimeMs;
                 double acrescimoPct = baselineTimeMs > 0.0
-                        ? ((avgTimeMs - baselineTimeMs) / baselineTimeMs) * 100.0
-                        : 0.0;
+                        ? ((avgTimeMs - baselineTimeMs) / baselineTimeMs) * 100.0 : 0.0;
 
                 String alerta = acrescimoPct > 50.0 ? "  [ESTOUROU +50%]" : "";
-                
-                // Conclui a impressao da linha no terminal
-                System.out.printf("Conv: %5.1f%% | Tempo: %5.2f ms | dT: %+5.1f%%%s%n",
+                System.out.printf("   >> MEDIA -> Conv: %5.1f%% | Tempo: %5.2f ms | dT: %+5.1f%%%s%n%n",
                         convergenceRate, avgTimeMs, acrescimoPct, alerta);
 
-                // Exportacao usando Localidade Norte-Americana (sem os simbolos %) para o BI processar liso
-                writer.printf(Locale.US, "%s,%s,%d,%d,%.2f,%.2f,%.2f,%d,%.4f,%.1f,%.1f%n",
+                writerMedia.printf(Locale.US, "%s,%s,%d,%d,%.2f,%.2f,%.2f,%d,%.4f,%.1f,%.1f%n",
                         v.id, v.descricao, v.popSize, v.maxGen, v.mutationRate,
-                        v.crossoverRate, v.elitismRate, convergences, avgTimeMs,
+                        v.crossoverRate, v.elitismRate, convergencesGeral, avgTimeMs,
                         convergenceRate, acrescimoPct);
             }
-            
+
             System.out.println("=====================================================================================");
-            System.out.println("                Etapa 3 concluida! Relatorio: resultados_etapa3.csv  ");
-            System.out.println("                Teto de tempo: +50% sobre o baseline (V0)            ");
+            System.out.println("   Etapa 3 concluida!");
+            System.out.println("   - resultados_etapa3.csv             (media por variacao)");
+            System.out.println("   - resultados_etapa3_por_problema.csv (detalhe por problema)");
             System.out.println("=====================================================================================");
-            
+
         } catch (Exception e) {
             System.err.println("Erro critico de I/O ao gravar o CSV: " + e.getMessage());
         }
     }
 
     private static long seedFor(int variationIndex, int problemIndex, int executionIndex) {
-        return BASE_SEED
-                + (variationIndex * 100_000L)
-                + (problemIndex * 10_000L)
-                + executionIndex;
+        return BASE_SEED + (variationIndex * 100_000L) + (problemIndex * 10_000L) + executionIndex;
     }
 }

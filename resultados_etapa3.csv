@@ -1,7 +1,9 @@
 ID,Descricao,PopSize,Geracoes,TaxaMutacao,TaxaCrossover,Elitismo,Convergencias,TempoMedio_ms,TaxaConvergencia,AcrescimoTempo_pct
-V0,Baseline Etapa 3 (V15),100,75,0.50,0.80,0.20,2376,2.0832,47.5,0.0
-V1,PositionalErrorFitness,100,75,0.50,0.80,0.20,1055,2.7511,21.1,32.1
-V2,PositionalError + Mut 60%,100,75,0.60,0.80,0.20,1206,2.7300,24.1,31.0
-V3,PositionalError + Tournament,100,75,0.50,0.80,0.20,687,1.4289,13.7,-31.4
-V4,PositionalError + CyclicCross,100,75,0.50,0.80,0.20,892,2.6592,17.8,27.7
-V5,Pop 150 + Tournament,150,75,0.50,0.80,0.20,945,2.0121,18.9,-3.4
+V0,Baseline Etapa 3 (V15),100,75,0.50,0.80,0.20,2376,1.9989,47.5,0.0
+V1,PositionalErrorFitness,100,75,0.50,0.80,0.20,1055,2.6695,21.1,33.5
+V2,PositionalError + Mut 60%,100,75,0.60,0.80,0.20,1206,2.6539,24.1,32.8
+V3,PositionalError + Tournament,100,75,0.50,0.80,0.20,687,1.2318,13.7,-38.4
+V4,PositionalError + CyclicCross,100,75,0.50,0.80,0.20,892,2.6951,17.8,34.8
+V5,Global + Geracoes 110,100,110,0.50,0.80,0.20,2473,2.6798,49.5,34.1
+V6,Global + Pop 150,150,75,0.50,0.80,0.20,2556,3.6101,51.1,80.6
+V7,Global + Pop 200 + Ger 100,200,100,0.50,0.80,0.20,2744,7.2063,54.9,260.5
