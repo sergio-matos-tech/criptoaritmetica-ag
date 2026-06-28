@@ -96,12 +96,8 @@ public class ExperimentRunnerEtapa3 {
                 new Variacao("V4", "PositionalError + CyclicCross", 100, 75, 0.50, 0.80, 0.20,
                         new PositionalErrorFitness(), new RouletteSelectionAggressive(),
                         new CyclicCrossover(), new SwapMutation()),
-
-                /* new Variacao("V5", "Pop 150 + Tournament", 150, 75, 0.50, 0.80, 0.20,
-                        new PositionalErrorFitness(), new TournamentSelection(3),
-                        new PmxCrossover(), new SwapMutation())  */
                 
-               new Variacao("V5", "Global + Geracoes 110", 100, 110, 0.50, 0.80, 0.20,
+                new Variacao("V5", "Global + Geracoes 110", 100, 110, 0.50, 0.80, 0.20,
                         new GlobalDifferenceFitness(), new RouletteSelectionAggressive(),
                         new PmxCrossover(), new SwapMutation()),
  
@@ -144,6 +140,7 @@ public class ExperimentRunnerEtapa3 {
 
                         EvolutionResult result = ga.evolve();
                         totalTimeNsProblema += result.getExecutionTimeNs();
+                        
                         if (result.isConverged()) convergencesProblema++;
                     }
 

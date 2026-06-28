@@ -49,10 +49,9 @@ public class GeneticAlgorithm {
 
         // 1. Inicialização limpa
         Population currentPopulation = new Population();
-        for (int i = 0; i < populationSize; i++) {
+        for (int i = 0; i < populationSize; i++) 
             currentPopulation.addIndividual(new Individual(random));
-        }
-
+        
         // 2. Avaliação Inicial
         evaluatePopulation(currentPopulation);
 
@@ -83,9 +82,8 @@ public class GeneticAlgorithm {
                 if (random.nextDouble() < mutationRate) mutation.mutate(child2, random);
 
                 offspring.addIndividual(child1);
-                if (offspring.size() < populationSize) {
+                if (offspring.size() < populationSize) 
                     offspring.addIndividual(child2);
-                }
             }
 
             evaluatePopulation(offspring);
@@ -93,10 +91,9 @@ public class GeneticAlgorithm {
             currentPopulation = replacement.replace(currentPopulation, offspring, populationSize);
             
             Individual generationBest = currentPopulation.getBest();
-            if (generationBest.getFitness() < globalBest.getFitness()) {
+            if (generationBest.getFitness() < globalBest.getFitness()) 
                 globalBest = generationBest;
-            }
-
+            
             currentGeneration++;
         }
 
@@ -107,11 +104,9 @@ public class GeneticAlgorithm {
     }
 
     private void evaluatePopulation(Population population) {
-        for (Individual ind : population.getIndividuals()) {
-            if (!ind.isEvaluated()) {
-                fitnessEvaluator.evaluate(ind, problem);
-            }
-        }
+        for (Individual ind : population.getIndividuals()) 
+            if (!ind.isEvaluated()) fitnessEvaluator.evaluate(ind, problem);
+        
         population.sort(); // Garante que a população sempre esteja ordenada do melhor para o pior
     }
 }

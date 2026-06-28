@@ -6,7 +6,7 @@ public class EvolutionResult {
     private final boolean converged;
     private final Individual bestSolution;
     private final int generationsRan;
-    private final long executionTimeNs; // Tempo em nanosegundos para alta precisão
+    private final long executionTimeNs; 
 
     public EvolutionResult(boolean converged, Individual bestSolution, int generationsRan, long executionTimeNs) {
         this.converged = converged;

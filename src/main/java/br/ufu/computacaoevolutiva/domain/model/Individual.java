@@ -29,7 +29,6 @@ public class Individual {
         if (genes.length != 10) 
             throw new IllegalArgumentException("O cromossomo deve ter exatamente tamanho 10.");
         
-        // Clona o array para evitar referência mutável indesejada (Defensive Copying)
         this.genes = genes.clone();
         this.isEvaluated = false;
     }
@@ -39,9 +38,8 @@ public class Individual {
     }
 
     public int getFitness() {
-        if (!isEvaluated) {
+        if (!isEvaluated) 
             throw new IllegalStateException("O fitness ainda não foi avaliado para este indivíduo.");
-        }
         return fitness;
     }
 

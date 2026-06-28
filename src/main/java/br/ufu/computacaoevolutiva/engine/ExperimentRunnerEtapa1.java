@@ -20,10 +20,10 @@ import br.ufu.computacaoevolutiva.domain.operators.SwapMutation;
 import br.ufu.computacaoevolutiva.domain.operators.TournamentSelection;
 import br.ufu.computacaoevolutiva.domain.operators.CyclicCrossover;
 
-public class ExperimentRunner {
+public class ExperimentRunnerEtapa1 {
 
     private static final long BASE_SEED = 2026L;
-
+    
     public static void main(String[] args) {
         System.out.println("=====================================================================================");
         System.out.println("              Iniciando Etapa 1: Algoritmo Genetico (16.000 runs)  ");

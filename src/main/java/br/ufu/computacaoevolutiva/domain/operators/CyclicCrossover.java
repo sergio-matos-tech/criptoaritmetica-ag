@@ -19,7 +19,6 @@ public class CyclicCrossover implements CrossoverStrategy {
 
         for (int i = 0; i < length; i++) {
             if (!visited[i]) {
-                // Inicia um novo ciclo
                 int currentIndex = i;
                 
                 while (!visited[currentIndex]) {
@@ -33,12 +32,10 @@ public class CyclicCrossover implements CrossoverStrategy {
                         c2[currentIndex] = p1[currentIndex];
                     }
 
-                    // Encontra a posição do gene do Pai 2 no Pai 1 para continuar o ciclo
                     int valueToFind = p2[currentIndex];
                     currentIndex = findIndex(p1, valueToFind);
                 }
                 
-                // Alterna a fonte de cópia para o próximo ciclo encontrado
                 copyFromP1ToC1 = !copyFromP1ToC1;
             }
         }
@@ -48,9 +45,9 @@ public class CyclicCrossover implements CrossoverStrategy {
 
     // Busca linear O(N). Como N é 10, é mais rápido que usar Map/Hashings.
     private int findIndex(int[] array, int value) {
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < array.length; i++) 
             if (array[i] == value) return i;
-        }
+        
         throw new IllegalStateException("Valor não encontrado. Permutação corrompida.");
     }
 }

@@ -68,7 +68,6 @@ public class ExperimentRunnerEtapa2 {
 
         // V0 = baseline (Config 16). Demais variam um eixo por vez; V9-V11 combinam eixos.
         Variacao[] variacoes = {
-            //          id     descricao                 pop  gen  mut   cross elit
             new Variacao("V0",  "Baseline (Config 16)",   100,  50, 0.20, 0.80, 0.20),
             new Variacao("V1",  "Geracoes 75",            100,  75, 0.20, 0.80, 0.20),
             new Variacao("V2",  "Geracoes 100",           100, 100, 0.20, 0.80, 0.20),
@@ -122,9 +121,9 @@ public class ExperimentRunnerEtapa2 {
                 double avgTimeMs = (totalTimeNs / (double) NUM_EXECUTIONS) / 1_000_000.0;
                 double convergenceRate = (convergences / (double) NUM_EXECUTIONS) * 100.0;
 
-                if (v.id.equals("V0")) {
+                if (v.id.equals("V0")) 
                     baselineTimeMs = avgTimeMs;
-                }
+                
                 double acrescimoPct = baselineTimeMs > 0
                         ? ((avgTimeMs - baselineTimeMs) / baselineTimeMs) * 100.0
                         : 0.0;

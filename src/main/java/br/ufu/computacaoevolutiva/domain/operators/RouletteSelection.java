@@ -11,10 +11,9 @@ public class RouletteSelection implements SelectionStrategy {
     @Override
     public Individual select(Population population, Random random) {
         List<Individual> individuals = population.getIndividuals();
-        if (individuals.isEmpty()) {
+        if (individuals.isEmpty()) 
             throw new IllegalStateException("A população não pode estar vazia.");
-        }
-
+        
         double totalFitness = 0.0;
         double[] selectionWeights = new double[individuals.size()];
 
@@ -30,9 +29,8 @@ public class RouletteSelection implements SelectionStrategy {
 
         for (int i = 0; i < individuals.size(); i++) {
             accumulated += selectionWeights[i];
-            if (accumulated >= spin) {
+            if (accumulated >= spin) 
                 return individuals.get(i);
-            }
         }
 
         return individuals.get(individuals.size() - 1);
