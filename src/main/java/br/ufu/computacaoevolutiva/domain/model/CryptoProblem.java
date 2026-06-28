@@ -12,21 +12,29 @@ import java.util.Set;
  * Pré-calcula os pesos base-10 e os índices das letras iniciais para otimização O(1).
  */
 public class CryptoProblem {
+    private final List<String> addends;
+    private final String result;
     private final char[] uniqueLetters;
     private final int[] weights;
     private final int[] leadingLetterIndices; 
 
     public CryptoProblem(List<String> addends, String result) {
+        if (addends == null || addends.isEmpty()) 
+            throw new IllegalArgumentException("O problema deve conter pelo menos uma parcela.");
+        if (result == null || result.isEmpty()) 
+            throw new IllegalArgumentException("O resultado nao pode ser nulo ou vazio.");
+
+        this.addends = List.copyOf(addends);
+        this.result = result;
+
         Map<Character, Integer> weightMap = new HashMap<>();
         Set<Character> leadingChars = new HashSet<>(); 
 
-        // Identifica as letras iniciais das parcelas e processa os pesos
         for (String word : addends) {
             if (!word.isEmpty()) leadingChars.add(word.charAt(0));
             processWord(word, weightMap, 1);
         }
         
-        // Identifica a letra inicial do resultado e processa
         if (!result.isEmpty()) leadingChars.add(result.charAt(0));
         processWord(result, weightMap, -1);
 
@@ -42,14 +50,11 @@ public class CryptoProblem {
             this.uniqueLetters[index] = entry.getKey();
             this.weights[index] = entry.getValue();
             
-            // Se esta letra for uma inicial, guardamos o índice dela
-            if (leadingChars.contains(entry.getKey())) {
+            if (leadingChars.contains(entry.getKey())) 
                 leadingIndicesList.add(index);
-            }
             index++;
         }
         
-        // Converte a lista para um array primitivo para acesso O(1) rápido
         this.leadingLetterIndices = leadingIndicesList.stream().mapToInt(i -> i).toArray();
     }
 
@@ -62,24 +67,22 @@ public class CryptoProblem {
         }
     }
 
+    public List<String> getAddends() { return addends; }
+    public String getResult() { return result; }
     public char[] getUniqueLetters() { return uniqueLetters; }
     public int[] getWeights() { return weights; }
 
     // Método O(1) para checar a restrição do zero
     public boolean hasInvalidLeadingZero(int[] genes) {
-        for (int idx : leadingLetterIndices) {
+        for (int idx : leadingLetterIndices) 
             if (genes[idx] == 0) return true;
-        }
         return false;
     }
 
     public int countInvalidLeadingZeros(int[] genes) {
         int count = 0;
-        for (int idx : leadingLetterIndices) {
-            if (genes[idx] == 0) {
-                count++;
-            }
-        }
+        for (int idx : leadingLetterIndices) 
+            if (genes[idx] == 0) count++;
         return count;
     }
 }

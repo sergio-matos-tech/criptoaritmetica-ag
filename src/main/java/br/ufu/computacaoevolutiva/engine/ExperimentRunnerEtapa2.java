@@ -36,11 +36,8 @@ public class ExperimentRunnerEtapa2 {
 
     // Parametros fixos herdados da Config 16
     private static final FitnessEvaluator EVALUATOR = new GlobalDifferenceFitness();
-
-    // Limites do problema
     private static final int NUM_EXECUTIONS = 1000;
 
-    /** Descreve uma variacao de parametros a ser testada. */
     private static class Variacao {
         final String id;
         final String descricao;
@@ -71,7 +68,6 @@ public class ExperimentRunnerEtapa2 {
 
         // V0 = baseline (Config 16). Demais variam um eixo por vez; V9-V11 combinam eixos.
         Variacao[] variacoes = {
-            //          id     descricao                 pop  gen  mut   cross elit
             new Variacao("V0",  "Baseline (Config 16)",   100,  50, 0.20, 0.80, 0.20),
             new Variacao("V1",  "Geracoes 75",            100,  75, 0.20, 0.80, 0.20),
             new Variacao("V2",  "Geracoes 100",           100, 100, 0.20, 0.80, 0.20),
@@ -84,12 +80,15 @@ public class ExperimentRunnerEtapa2 {
             new Variacao("V9",  "Pop150 + Gen75",         150,  75, 0.20, 0.80, 0.20),
             new Variacao("V10", "Pop150 + Mut30%",        150,  50, 0.30, 0.80, 0.20),
             new Variacao("V11", "Gen75 + Mut30%",         100,  75, 0.30, 0.80, 0.20),
+            new Variacao("V12", "Mutacao 50%",            100,  50, 0.50, 0.80, 0.20),
+            new Variacao("V13", "Mut40% + Elit10%",       100,  50, 0.40, 0.80, 0.10),
+            new Variacao("V14", "Mut40% + Gen75",         100,  75, 0.40, 0.80, 0.20),
+            new Variacao("V15", "Mut50% + Gen75",         100,  75, 0.50, 0.80, 0.20),
         };
 
         double baselineTimeMs = -1;
 
         try (PrintWriter writer = new PrintWriter(new FileWriter("resultados_etapa2.csv"))) {
-            // Cabecalho: superset do CSV da etapa 1 + colunas de parametros variados
             writer.println("ID,Descricao,PopSize,Geracoes,TaxaMutacao,TaxaCrossover,Elitismo,"
                     + "Convergencias,TempoMedio_ms,TaxaConvergencia,AcrescimoTempo_pct");
 
@@ -113,18 +112,18 @@ public class ExperimentRunnerEtapa2 {
                             runRng
                     );
                     EvolutionResult result = ga.evolve();
-                    if (result.isConverged()) {
+                    if (result.isConverged()) 
                         convergences++;
-                    }
+                    
                     totalTimeNs += result.getExecutionTimeNs();
                 }
 
                 double avgTimeMs = (totalTimeNs / (double) NUM_EXECUTIONS) / 1_000_000.0;
                 double convergenceRate = (convergences / (double) NUM_EXECUTIONS) * 100.0;
 
-                if (v.id.equals("V0")) {
+                if (v.id.equals("V0")) 
                     baselineTimeMs = avgTimeMs;
-                }
+                
                 double acrescimoPct = baselineTimeMs > 0
                         ? ((avgTimeMs - baselineTimeMs) / baselineTimeMs) * 100.0
                         : 0.0;

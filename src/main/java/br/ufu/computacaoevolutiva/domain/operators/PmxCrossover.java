@@ -10,7 +10,6 @@ public class PmxCrossover implements CrossoverStrategy {
     public Individual[] crossover(Individual parent1, Individual parent2, Random random) {
         int length = parent1.getGenes().length;
         
-        // 1. Sorteia os dois pontos de corte
         int point1 = random.nextInt(length);
         int point2 = random.nextInt(length);
         
@@ -46,7 +45,6 @@ public class PmxCrossover implements CrossoverStrategy {
 
             int candidate = p2[i];
             
-            // Se o candidato já está no filho (conflito), navegamos pelo mapa até achar um livre
             while (contains(childGenes, start, end, candidate)) 
                 candidate = mapping[candidate];
             childGenes[i] = candidate;

@@ -9,14 +9,12 @@ public class OrderedReplacement implements ReplacementStrategy {
     public Population replace(Population parents, Population offspring, int targetSize) {
         Population combined = new Population();
 
-        // Junta as duas populações
         for (Individual ind : parents.getIndividuals()) 
             combined.addIndividual(ind);
         
         for (Individual ind : offspring.getIndividuals()) 
             combined.addIndividual(ind);
 
-        // Ordena do menor erro (melhor) para o maior erro
         combined.sort();
 
         // Extrai o top N

@@ -10,25 +10,23 @@ public class RouletteSelectionAggressive implements SelectionStrategy {
 
     @Override
     public Individual select(Population population, Random random) {
+        
         List<Individual> individuals = population.getIndividuals();
-        if (individuals.isEmpty()) {
+        if (individuals.isEmpty()) 
             throw new IllegalStateException("A população não pode estar vazia.");
-        }
-
+        
         int size = individuals.size();
         double[] weights = new double[size];
         long maxFit = Long.MIN_VALUE;
 
         for (Individual individual : individuals) {
             long fitness = individual.getFitness();
-            if (fitness < Long.MAX_VALUE / 2 && fitness > maxFit) {
+            if (fitness < Long.MAX_VALUE / 2 && fitness > maxFit) 
                 maxFit = fitness;
-            }
         }
 
-        if (maxFit == Long.MIN_VALUE) {
+        if (maxFit == Long.MIN_VALUE) 
             maxFit = 0;
-        }
 
         double totalWeight = 0.0;
         for (int i = 0; i < size; i++) {
@@ -45,9 +43,8 @@ public class RouletteSelectionAggressive implements SelectionStrategy {
         double accumulated = 0.0;
         for (int i = 0; i < size; i++) {
             accumulated += weights[i];
-            if (accumulated >= spin) {
+            if (accumulated >= spin) 
                 return individuals.get(i);
-            }
         }
 
         return individuals.get(size - 1);
