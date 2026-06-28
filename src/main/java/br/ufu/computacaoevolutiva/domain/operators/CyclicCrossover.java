@@ -13,37 +13,30 @@ public class CyclicCrossover implements CrossoverStrategy {
 
         int[] c1 = new int[length];
         int[] c2 = new int[length];
-        boolean[] visited = new boolean[length];
+        
+        boolean[] inCycle = new boolean[length];
 
-        boolean copyFromP1ToC1 = true;
+        int currentIndex = 0;
+        while (!inCycle[currentIndex]) {
+            inCycle[currentIndex] = true; 
+            int valueToFind = p2[currentIndex]; 
+            currentIndex = findIndex(p1, valueToFind);
+        }
 
         for (int i = 0; i < length; i++) {
-            if (!visited[i]) {
-                int currentIndex = i;
-                
-                while (!visited[currentIndex]) {
-                    visited[currentIndex] = true;
-                    
-                    if (copyFromP1ToC1) {
-                        c1[currentIndex] = p1[currentIndex];
-                        c2[currentIndex] = p2[currentIndex];
-                    } else {
-                        c1[currentIndex] = p2[currentIndex];
-                        c2[currentIndex] = p1[currentIndex];
-                    }
-
-                    int valueToFind = p2[currentIndex];
-                    currentIndex = findIndex(p1, valueToFind);
-                }
-                
-                copyFromP1ToC1 = !copyFromP1ToC1;
+            if (inCycle[i]) {
+                c1[i] = p2[i];
+                c2[i] = p1[i];
+            } else {
+                c1[i] = p1[i];
+                c2[i] = p2[i];
             }
         }
 
         return new Individual[]{new Individual(c1), new Individual(c2)};
     }
 
-    // Busca linear O(N). Como N é 10, é mais rápido que usar Map/Hashings.
+    // Busca linear O(N). Como N é no máximo 10 (0 a 9), é muito rápido.
     private int findIndex(int[] array, int value) {
         for (int i = 0; i < array.length; i++) 
             if (array[i] == value) return i;
